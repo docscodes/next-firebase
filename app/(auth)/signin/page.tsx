@@ -1,5 +1,5 @@
-const Signin = () => {
-  return <div>Signin Page</div>;
-};
+import ContinueWithGoogleButton from "@/components/continue-with-google-button";
 
-export default Signin;
+export default function Signin() {
+  return <ContinueWithGoogleButton />;
+}
