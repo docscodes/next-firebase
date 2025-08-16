@@ -1,18 +1,14 @@
 import AuthButtons from "@/components/auth-buttons";
 import { AuthProvider } from "@/context/auth";
+import { HomeIcon } from "lucide-react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -27,11 +23,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${poppins.className} } antialiased`}>
         <AuthProvider>
-          <nav className="p-4 flex items-center justify-between sticky top-0 bg-background z-10">
-            <Link href="/">My Properties</Link>
+          <nav className="p-4 flex items-center justify-between h-24 sticky top-0 bg-background z-10">
+            <Link
+              href="/"
+              className="text-2xl tracking-widest flex gap-2 items-center uppercase"
+            >
+              <HomeIcon size={40} />
+              <span>My properties</span>
+            </Link>
             <ul className="flex gap-6 items-center">
+              <li>
+                <Link
+                  href="/property-search"
+                  className="uppercase tracking-widest hover:underline"
+                >
+                  Property search
+                </Link>
+              </li>
               <li>
                 <AuthButtons />
               </li>
