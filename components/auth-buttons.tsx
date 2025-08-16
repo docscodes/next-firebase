@@ -11,7 +11,7 @@ export default function AuthButtons() {
       {!!auth?.currentUser && (
         <div className="flex gap-2 items-center">
           <div>{auth.currentUser.email}</div>
-          <div>Logout</div>
+          <div onClick={auth.logout}>Logout</div>
         </div>
       )}
 
