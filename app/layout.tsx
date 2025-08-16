@@ -1,3 +1,5 @@
+import AuthButtons from "@/components/auth-buttons";
+import { AuthProvider } from "@/context/auth";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -26,18 +28,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <nav className="p-4 flex items-center justify-between sticky top-0 bg-background z-10">
-          <Link href="/">My Properties</Link>
-          <ul className="flex gap-6 items-center">
-            <li>
-              <Link href="/signin">Signin</Link>
-            </li>
-             <li>
-              <Link href="/signup">Signup</Link>
-            </li>
-          </ul>
-        </nav>
-        {children}
+        <AuthProvider>
+          <nav className="p-4 flex items-center justify-between sticky top-0 bg-background z-10">
+            <Link href="/">My Properties</Link>
+            <ul className="flex gap-6 items-center">
+              <li>
+                <AuthButtons />
+              </li>
+            </ul>
+          </nav>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
