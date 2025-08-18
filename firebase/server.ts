@@ -3,6 +3,14 @@ import { getApps, ServiceAccount } from "firebase-admin/app";
 import { Auth, getAuth } from "firebase-admin/auth";
 import { Firestore, getFirestore } from "firebase-admin/firestore";
 
+if (
+  !process.env.FIREBASE_PRIVATE_KEY ||
+  !process.env.FIREBASE_CLIENT_EMAIL ||
+  !process.env.FIREBASE_CLIENT_ID
+) {
+  throw new Error("Missing Firebase environment variables");
+}
+
 const serviceAccount = {
   type: "service_account",
   project_id: "next-property-ea36a",

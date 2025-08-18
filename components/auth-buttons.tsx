@@ -51,13 +51,17 @@ export default function AuthButtons() {
               <Link href="/account">My Account</Link>
             </DropdownMenuItem>
 
-            <DropdownMenuItem asChild>
-              <Link href="/account/favourites">My Favourites</Link>
-            </DropdownMenuItem>
+            {!auth.customClaims?.admin && (
+              <DropdownMenuItem asChild>
+                <Link href="/account/favourites">My Favourites</Link>
+              </DropdownMenuItem>
+            )}
 
-            <DropdownMenuItem asChild>
-              <Link href="/admin">Admin</Link>
-            </DropdownMenuItem>
+            {!!auth.customClaims?.admin && (
+              <DropdownMenuItem asChild>
+                <Link href="/admin">Admin</Link>
+              </DropdownMenuItem>
+            )}
 
             <DropdownMenuItem
               onClick={async () => {
