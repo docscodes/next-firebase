@@ -18,7 +18,7 @@ const Admin = () => {
         asChild
         className="inline-flex pl-2 gap-2 mt-4"
       >
-        <Link href="/admin-dashboard/new">
+        <Link href="/admin/new">
           <PlusCircleIcon /> New Property
         </Link>
       </Button>
