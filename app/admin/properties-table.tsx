@@ -9,7 +9,7 @@ import {
 import { getProperties } from "@/data/properties";
 
 export default async function PropertiesTable() {
-  const { data } = await getProperties({
+  const { data, totalPages } = await getProperties({
     pagination: {
       pageSize: 2,
     },
