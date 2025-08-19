@@ -1,4 +1,5 @@
 import AuthButtons from "@/components/auth-buttons";
+import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/context/auth";
 import { HomeIcon } from "lucide-react";
 import type { Metadata } from "next";
@@ -48,6 +49,10 @@ export default function RootLayout({
             </ul>
           </nav>
           {children}
+          <Toaster
+            richColors
+            closeButton
+          />
         </AuthProvider>
       </body>
     </html>
