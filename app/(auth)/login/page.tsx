@@ -16,7 +16,7 @@ export default function Login() {
       <CardFooter>
         Don&apos;t have an account?
         <Link
-          href="/singup"
+          href="/signup"
           className="underline pl-2"
         >
           Signup here.

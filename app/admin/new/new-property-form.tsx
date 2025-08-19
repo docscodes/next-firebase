@@ -1,9 +1,25 @@
-import PropertyForm from "@/components/property-form";
+"use client";
+
+import PropertyDataForm from "@/components/property-form";
+import { propertyDataSchema } from "@/validation/propertySchema";
+import { PlusCircleIcon } from "lucide-react";
+import z from "zod";
 
 const NewPropertyForm = () => {
+  const handleSubmit = async (data: z.infer<typeof propertyDataSchema>) => {
+    console.log(data);
+  };
+
   return (
     <div>
-      <PropertyForm />
+      <PropertyDataForm
+        handleSubmit={handleSubmit}
+        submitButtonLabel={
+          <>
+            <PlusCircleIcon /> Create Property
+          </>
+        }
+      />
     </div>
   );
 };
