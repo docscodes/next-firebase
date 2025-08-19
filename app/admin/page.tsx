@@ -1,13 +1,10 @@
 import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { getProperties } from "@/data/properties";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
+import PropertiesTable from "./properties-table";
 
 const Admin = async () => {
-  const data = await getProperties();
-  console.log(data);
-
   return (
     <div>
       <Breadcrumbs
@@ -26,6 +23,7 @@ const Admin = async () => {
           <PlusCircleIcon /> New Property
         </Link>
       </Button>
+      <PropertiesTable />
     </div>
   );
 };
