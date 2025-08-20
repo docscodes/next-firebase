@@ -16,12 +16,11 @@ export type ImageUpload = {
 type Props = {
   images?: ImageUpload[];
   onImagesChange: (images: ImageUpload[]) => void;
+  urlFormatter?: (image: ImageUpload) => string;
 };
 
-
-const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
+const MultiImageUploader = ({ images = [], onImagesChange, urlFormatter }: Props) => {
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -36,7 +35,6 @@ const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
 
     onImagesChange([...images, ...newImages]);
   };
-
 
   const handleDragEnd = useCallback(
     (result: DropResult) => {
@@ -54,7 +52,6 @@ const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
 
     [onImagesChange, images]
   );
-  
 
   const handleDelete = useCallback(
     (id: string) => {
@@ -111,7 +108,7 @@ const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
                       <div className="bg-gray-100 rounded-lg flex gap-2 items-center overflow-hidden">
                         <div className="size-16 w-16 h-16 relative">
                           <Image
-                            src={image.url}
+                            src={urlFormatter ? urlFormatter(image) : image.url}
                             alt=""
                             fill
                             className="object-cover"

@@ -23,6 +23,7 @@ const EditPropertyForm = ({
   description,
   price,
   status,
+  images = [],
 }: Props) => {
   const router = useRouter();
 
@@ -59,6 +60,7 @@ const EditPropertyForm = ({
           description,
           price,
           status,
+          images: images?.map((image) => ({ id: image, url: image })),
         }}
       />
     </div>

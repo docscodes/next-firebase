@@ -212,6 +212,14 @@ export default function PropertyForm({ handleSubmit, submitButtonLabel, defaultV
                     form.setValue("images", images);
                   }}
                   images={field.value}
+                  urlFormatter={(image) => {
+                    if (!image.file) {
+                      return `https://firebasestorage.googleapis.com/v0/b/next-property-ea36a.firebasestorage.app/o/${encodeURIComponent(
+                        image.url
+                      )}?alt=media`;
+                    }
+                    return image.url;
+                  }}
                 />
               </FormControl>
               <FormMessage />
