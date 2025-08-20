@@ -6,7 +6,6 @@ import PropertiesTable from "./properties-table";
 
 const Admin = async ({ searchParams }: { searchParams?: Promise<any> }) => {
   const searchParamsValue = await searchParams;
-  console.log({ searchParamsValue });
 
   return (
     <div>

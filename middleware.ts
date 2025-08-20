@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  console.log("MIDDLEWARE: ", request.url);
+  // console.log("MIDDLEWARE: ", request.url);
 
   if (request.method === "POST") {
     return NextResponse.next();
