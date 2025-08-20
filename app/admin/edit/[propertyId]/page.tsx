@@ -5,7 +5,7 @@ import EditPropertyForm from "./edit-property-form";
 
 const EditProperty = async ({ params }: { params: Promise<any> }) => {
   const paramsValue = await params;
-  const property = await getPropertyById(paramsValue.id);
+  const property = await getPropertyById(paramsValue.propertyId);
 
   return (
     <div>
