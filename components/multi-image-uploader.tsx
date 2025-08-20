@@ -1,6 +1,10 @@
 "use client";
 
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { MoveIcon, XIcon } from "lucide-react";
+import Image from "next/image";
 import { useRef } from "react";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
 export type ImageUpload = {
@@ -31,6 +35,10 @@ const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
     onImagesChange([...images, ...newImages]);
   };
 
+  function handleDragEnd() {}
+
+  function handleDelete(id: string) {}
+
   return (
     <div className="w-full max-w-3xl mx-auto p-4">
       <input
@@ -45,9 +53,69 @@ const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
       <Button
         type="button"
         onClick={() => uploadInputRef?.current?.click()}
+        variant="outline"
+        className="w-full"
       >
         Upload images
       </Button>
+
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable
+          droppableId="property-images"
+          direction="vertical"
+        >
+          {(provided) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {images.map((image, index) => (
+                <Draggable
+                  key={image.id}
+                  draggableId={image.id}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      className="relative p-2"
+                    >
+                      <div className="bg-gray-100 rounded-lg flex gap-2 items-center overflow-hidden">
+                        <div className="size-16 w-16 h-16 relative">
+                          <Image
+                            src={image.url}
+                            alt=""
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="flex-grow">
+                          <p className="text-sm font-medium">Image {index + 1}</p>
+                          {index === 0 && <Badge variant="success">Featured Image</Badge>}
+                        </div>
+                        <div className="flex items-center p-2">
+                          <button
+                            className="text-red-500 p-2"
+                            onClick={() => handleDelete(image.id)}
+                          >
+                            <XIcon />
+                          </button>
+                          <div className="text-gray-500">
+                            <MoveIcon />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 };
