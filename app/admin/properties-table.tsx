@@ -9,9 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getProperties } from "@/data/properties";
+import { EyeIcon, PencilIcon } from "lucide-react";
 import Link from "next/link";
 
-export default async function PropertiesTable({ page = 1 }: { page?: number }) {
+const PropertiesTable = async ({ page = 1 }: { page?: number }) => {
   const { data, totalPages } = await getProperties({
     pagination: {
       page,
@@ -52,7 +53,26 @@ export default async function PropertiesTable({ page = 1 }: { page?: number }) {
                   <TableCell>{address}</TableCell>
                   <TableCell>{property.price}</TableCell>
                   <TableCell>{property.status}</TableCell>
-                  <TableCell>view / edit</TableCell>
+                  <TableCell>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Link href={`/property/${property.id}`}>
+                        <EyeIcon />
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                    >
+                      <Link href={`/admin/edit/${property.id}`}>
+                        <PencilIcon />
+                      </Link>
+                    </Button>
+                  </TableCell>
                 </TableRow>
               );
             })}
@@ -81,4 +101,6 @@ export default async function PropertiesTable({ page = 1 }: { page?: number }) {
       )}
     </>
   );
-}
+};
+
+export default PropertiesTable;
