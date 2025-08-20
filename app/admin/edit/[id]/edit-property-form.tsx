@@ -1,11 +1,14 @@
 "use client";
 
 import PropertyForm from "@/components/property-form";
+import { auth } from "@/firebase/client";
 import { Property } from "@/types/property";
-import { SaveIcon } from "lucide-react";
-import { z } from "zod";
-
 import { propertyDataSchema } from "@/validation/propertySchema";
+import { SaveIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { z } from "zod";
+import { updateProperty } from "./actions";
 
 type Props = Property;
 
@@ -21,8 +24,20 @@ const EditPropertyForm = ({
   price,
   status,
 }: Props) => {
+  const router = useRouter();
+
   const handleSubmit = async (data: z.infer<typeof propertyDataSchema>) => {
-    console.log({ data });
+    const token = await auth?.currentUser?.getIdToken();
+
+    if (!token) {
+      return;
+    }
+    await updateProperty({ ...data, id }, token);
+
+    toast.success("Success!", {
+      description: "Property updated",
+    });
+    router.push("/admin");
   };
 
   return (
