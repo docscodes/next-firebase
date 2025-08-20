@@ -4,6 +4,7 @@ import { propertyDataSchema } from "@/validation/propertySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import MultiImageUploader from "./multi-image-uploader";
 import { Button } from "./ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
@@ -199,6 +200,7 @@ export default function PropertyForm({ handleSubmit, submitButtonLabel, defaultV
           </fieldset>
         </div>
 
+        <MultiImageUploader onImagesChange={() =>{}} />
         <Button
           type="submit"
           className="max-w-md mx-auto mt-2 w-full flex gap-2"
