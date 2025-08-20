@@ -1,9 +1,9 @@
 "use client";
 
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea/dnd";
 import { MoveIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
@@ -18,8 +18,10 @@ type Props = {
   onImagesChange: (images: ImageUpload[]) => void;
 };
 
+
 const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -35,9 +37,33 @@ const MultiImageUploader = ({ images = [], onImagesChange }: Props) => {
     onImagesChange([...images, ...newImages]);
   };
 
-  function handleDragEnd() {}
 
-  function handleDelete(id: string) {}
+  const handleDragEnd = useCallback(
+    (result: DropResult) => {
+      if (!result.destination) {
+        return;
+      }
+
+      const items = Array.from(images);
+      const [reorderedImage] = items.splice(result.source.index, 1);
+
+      items.splice(result.destination.index, 0, reorderedImage);
+
+      onImagesChange(items);
+    },
+
+    [onImagesChange, images]
+  );
+  
+
+  const handleDelete = useCallback(
+    (id: string) => {
+      const updatedImages = images.filter((image) => image.id !== id);
+      onImagesChange(updatedImages);
+    },
+
+    [onImagesChange, images]
+  );
 
   return (
     <div className="w-full max-w-3xl mx-auto p-4">
