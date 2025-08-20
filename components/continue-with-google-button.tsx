@@ -1,15 +1,18 @@
 "use client";
 
 import { useAuth } from "@/context/auth";
+import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
 export default function ContinueWithGoogleButton() {
   const auth = useAuth();
+  const router = useRouter();
 
   return (
     <Button
-      onClick={() => {
-        auth?.loginWithGoogle();
+      onClick={async () => {
+        await auth?.loginWithGoogle();
+        router.refresh();
       }}
       className="w-full"
     >

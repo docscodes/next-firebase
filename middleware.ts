@@ -12,6 +12,27 @@ export async function middleware(request: NextRequest) {
   const cookieStore = await cookies();
   const token = cookieStore.get("firebaseAuthToken")?.value;
 
+  const { pathname } = request.nextUrl;
+
+  if (
+    !token &&
+    (pathname.startsWith("/login") ||
+      pathname.startsWith("/signup") ||
+      pathname.startsWith("/property-search") ||
+      pathname.startsWith("/forgot-password"))
+  ) {
+    return NextResponse.next();
+  }
+
+  if (
+    token &&
+    (pathname.startsWith("/login") ||
+      pathname.startsWith("/signup") ||
+      pathname.startsWith("/forgot-password"))
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   if (!token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -25,5 +46,14 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin"],
+  matcher: [
+    "/admin",
+    "/admin/:path*",
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/account",
+    "/account/:path*",
+    "/property-search",
+  ],
 };
