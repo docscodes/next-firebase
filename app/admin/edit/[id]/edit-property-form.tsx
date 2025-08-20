@@ -1,13 +1,15 @@
 "use client";
 
 import PropertyForm from "@/components/property-form";
-import { auth } from "@/firebase/client";
+import { auth, storage } from "@/firebase/client";
 import { Property } from "@/types/property";
-import { propertyDataSchema } from "@/validation/propertySchema";
+import { propertySchema } from "@/validation/propertySchema";
+import { deleteObject, ref, uploadBytesResumable, UploadTask } from "firebase/storage";
 import { SaveIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
+import { savePropertyImages } from "../../actions";
 import { updateProperty } from "./actions";
 
 type Props = Property;
@@ -27,13 +29,53 @@ const EditPropertyForm = ({
 }: Props) => {
   const router = useRouter();
 
-  const handleSubmit = async (data: z.infer<typeof propertyDataSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof propertySchema>) => {
     const token = await auth?.currentUser?.getIdToken();
 
     if (!token) {
       return;
     }
-    await updateProperty({ ...data, id }, token);
+
+    const { images: newImages, ...rest } = data;
+
+    // update property
+    const response = await updateProperty({ ...rest, id }, token);
+
+    if (!!response?.error) {
+      toast.error("Error!", {
+        description: response.message,
+      });
+      return;
+    }
+
+    // upload images
+    const storageTasks: (UploadTask | Promise<void>)[] = [];
+
+    const imagesToDelete = images.filter(
+      (image) => !newImages.find((newImage) => image === newImage.url)
+    );
+
+    imagesToDelete.forEach((image) => {
+      storageTasks.push(deleteObject(ref(storage, image)));
+    });
+
+    const paths: string[] = [];
+
+    newImages.forEach((image, index) => {
+      // new image to push to storage
+      if (image.file) {
+        const path = `properties/${id}/${Date.now()}-${index}-${image.file.name}`;
+        paths.push(path);
+
+        const storageRef = ref(storage, path);
+        storageTasks.push(uploadBytesResumable(storageRef, image.file));
+      } else {
+        paths.push(image.url); //uploaded image
+      }
+    });
+
+    await Promise.all(storageTasks);
+    await savePropertyImages({ propertyId: id, images: paths }, token);
 
     toast.success("Success!", {
       description: "Property updated",
