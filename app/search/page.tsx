@@ -46,6 +46,8 @@ const Search = async ({ searchParams }: Props) => {
   return (
     <div className="max-w-screen-lg mx-auto">
       <h1 className="text-4xl font-bold p-5">Property Search</h1>
+
+      {/* FILTERS */}
       <Card>
         <CardHeader>
           <CardTitle>Filters</CardTitle>
@@ -57,6 +59,7 @@ const Search = async ({ searchParams }: Props) => {
         </CardContent>
       </Card>
 
+      {/* PROPERTIES */}
       <div className="grid grid-cols-3 mt-5 gap-5">
         {data.map((property) => {
           const addressLines = [
@@ -107,6 +110,38 @@ const Search = async ({ searchParams }: Props) => {
                 </div>
               </CardContent>
             </Card>
+          );
+        })}
+      </div>
+
+      {/* PAGINATION  */}
+      <div className="flex gap-2 items-center justify-center py-10">
+        {Array.from({ length: totalPages }).map((_, i) => {
+          const newSearchParams = new URLSearchParams();
+
+          if (searchParamsValues?.minPrice) {
+            newSearchParams.set("minPrice", searchParamsValues.minPrice);
+          }
+
+          if (searchParamsValues?.maxPrice) {
+            newSearchParams.set("maxPrice", searchParamsValues.maxPrice);
+          }
+
+          if (searchParamsValues?.minBedrooms) {
+            newSearchParams.set("minBedrooms", searchParamsValues.minBedrooms);
+          }
+
+          newSearchParams.set("page", `${i + 1}`);
+
+          return (
+            <Button
+              asChild={page !== i + 1}
+              disabled={page === i + 1}
+              variant="outline"
+              key={i}
+            >
+              <Link href={`/search?${newSearchParams.toString()}`}>{i + 1}</Link>
+            </Button>
           );
         })}
       </div>
