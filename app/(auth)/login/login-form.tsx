@@ -8,7 +8,9 @@ import { useAuth } from "@/context/auth";
 import { passwordValidation } from "@/validation/registerUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -16,7 +18,8 @@ const formSchema = z.object({
   password: passwordValidation,
 });
 
-const LoginForm = ({ onSuccess }: { onSuccess?: () => void }) => {
+const LoginForm = () => {
+  const router = useRouter();
   const auth = useAuth();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -27,7 +30,15 @@ const LoginForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    await auth?.loginWithEmail(data.email, data.password);
+    try {
+      await auth?.loginWithEmail(data.email, data.password);
+      router.refresh();
+    } catch (e: any) {
+      toast.error("Error!", {
+        description:
+          e.code === "auth/invalid-credential" ? "Incorrect credentials" : "An error occurred",
+      });
+    }
   };
 
   return (
