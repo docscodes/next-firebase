@@ -1,8 +1,8 @@
-import ContinueWithGoogleButton from "@/components/continue-with-google-button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import LoginForm from "./login-form";
 
-export default function Login() {
+const Login = () => {
   return (
     <Card>
       <CardHeader>
@@ -10,7 +10,7 @@ export default function Login() {
       </CardHeader>
 
       <CardContent>
-        <ContinueWithGoogleButton />
+        <LoginForm />
       </CardContent>
 
       <CardFooter>
@@ -24,4 +24,6 @@ export default function Login() {
       </CardFooter>
     </Card>
   );
-}
+};
+
+export default Login;

@@ -15,6 +15,7 @@ export default function ContinueWithGoogleButton() {
         router.refresh();
       }}
       className="w-full"
+      variant={"outline"}
     >
       Continue with Google
     </Button>
