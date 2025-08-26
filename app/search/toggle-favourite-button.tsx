@@ -23,6 +23,7 @@ const ToggleFavouriteButton = ({
         const tokenResult = await auth?.currentUser?.getIdTokenResult();
 
         if (!tokenResult) {
+          router.push("/login");
           return;
         }
 
