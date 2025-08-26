@@ -2,7 +2,9 @@
 
 import { useAuth } from "@/context/auth";
 import { HeartIcon } from "lucide-react";
-import { addFavourite } from "./actions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { addFavourite, removeFavourite } from "./actions";
 
 const ToggleFavouriteButton = ({
   propertyId,
@@ -12,10 +14,11 @@ const ToggleFavouriteButton = ({
   isFavourite: boolean;
 }) => {
   const auth = useAuth();
+  const router = useRouter();
 
   return (
     <button
-      className="absolute top-0 right-0 z-10 p-2"
+      className="absolute top-0 right-0 z-10 p-2 bg-white rounded-bl-lg"
       onClick={async () => {
         const tokenResult = await auth?.currentUser?.getIdTokenResult();
 
@@ -23,10 +26,21 @@ const ToggleFavouriteButton = ({
           return;
         }
 
-        await addFavourite(propertyId, tokenResult.token);
+        if (isFavourite) {
+          await removeFavourite(propertyId, tokenResult.token);
+        } else {
+          await addFavourite(propertyId, tokenResult.token);
+        }
+
+        toast.success(`Property ${isFavourite ? "removed from" : "added to"} favourites`);
+
+        router.refresh();
       }}
     >
-      <HeartIcon fill={isFavourite ? "pink" : "white"} />
+      <HeartIcon
+        className="text-black"
+        fill={isFavourite ? "#db2777" : "white"}
+      />
     </button>
   );
 };
