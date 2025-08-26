@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/table";
 import { getUserFavourites } from "@/data/favourites";
 import { getPropertiesByIds } from "@/data/properties";
-import { EyeIcon, Trash2Icon } from "lucide-react";
+import { EyeIcon } from "lucide-react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import RemoveFavouriteButton from "./remove-favourite-button";
 
 export default async function Favourites({ searchParams }: { searchParams: Promise<any> }) {
   // page
@@ -27,6 +29,10 @@ export default async function Favourites({ searchParams }: { searchParams: Promi
   const pageSize = 2;
   const totalPages = Math.ceil(allFavourites.length / pageSize);
   const paginatedFavourites = allFavourites.slice((page - 1) * pageSize, page * pageSize);
+
+  if (!paginatedFavourites.length && page > 1) {
+    redirect(`/account/favourites?page=${totalPages}`);
+  }
 
   const properties = await getPropertiesByIds(paginatedFavourites);
   console.log({ paginatedFavourites, properties });
@@ -83,9 +89,8 @@ export default async function Favourites({ searchParams }: { searchParams: Promi
                             <EyeIcon />
                           </Link>
                         </Button>
-                        <Button variant="outline">
-                          <Trash2Icon />
-                        </Button>
+
+                        <RemoveFavouriteButton propertyId={property.id} />
                       </>
                     )}
                   </TableCell>
@@ -93,7 +98,29 @@ export default async function Favourites({ searchParams }: { searchParams: Promi
               );
             })}
           </TableBody>
-          <TableFooter />
+
+          <TableFooter>
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="text-center"
+              >
+                {Array.from({ length: totalPages }).map((_, i) => {
+                  return (
+                    <Button
+                      disabled={page === i + 1}
+                      key={i}
+                      asChild={page !== i + 1}
+                      variant="outline"
+                      className="mx-1"
+                    >
+                      <Link href={`/account/favourites?page=${i + 1}`}>{i + 1}</Link>
+                    </Button>
+                  );
+                })}
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       )}
     </div>
