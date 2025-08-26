@@ -38,6 +38,14 @@ export async function middleware(request: NextRequest) {
   }
 
   const decodedToken = decodeJwt(token);
+
+  // check if token is going to expire in 5 minutes
+  if (decodedToken.exp && (decodedToken.exp - 300) * 1000 < Date.now()) {
+    return NextResponse.redirect(
+      new URL(`/api/refresh-token?redirect=${encodeURIComponent(pathname)}`, request.url)
+    );
+  }
+
   if (!decodedToken.admin) {
     return NextResponse.redirect(new URL("/", request.url));
   }
