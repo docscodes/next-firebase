@@ -8,6 +8,7 @@ import Link from "next/link";
 import numeral from "numeral";
 import { Suspense } from "react";
 import FiltersForm from "./filters-form";
+import ToggleFavouriteButton from "./toggle-favourite-button";
 
 interface Props {
   searchParams: Promise<{
@@ -78,6 +79,7 @@ const Search = async ({ searchParams }: Props) => {
             >
               <CardContent className="px-0">
                 <div className="h-40 relative bg-sky-50 text-zinc-400 flex flex-col justify-center items-center">
+                  <ToggleFavouriteButton />
                   {!!property.images?.[0] && (
                     <Image
                       fill
