@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getUserFavourites } from "@/data/favourites";
 import { getProperties } from "@/data/properties";
 import imageUrlFormatter from "@/lib/imageUrlFormatter";
 import { BathIcon, BedIcon, HomeIcon } from "lucide-react";
@@ -44,6 +45,10 @@ const Search = async ({ searchParams }: Props) => {
     },
   });
 
+  const userFavourites = await getUserFavourites();
+
+  console.log({ userFavourites });
+
   return (
     <div className="max-w-screen-lg mx-auto">
       <h1 className="text-4xl font-bold p-5">Property Search</h1>
@@ -79,7 +84,10 @@ const Search = async ({ searchParams }: Props) => {
             >
               <CardContent className="px-0">
                 <div className="h-40 relative bg-sky-50 text-zinc-400 flex flex-col justify-center items-center">
-                  <ToggleFavouriteButton />
+                  <ToggleFavouriteButton
+                    isFavourite={userFavourites[property.id]}
+                    propertyId={property.id}
+                  />
                   {!!property.images?.[0] && (
                     <Image
                       fill

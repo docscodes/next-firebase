@@ -18,7 +18,7 @@ export async function middleware(request: NextRequest) {
     !token &&
     (pathname.startsWith("/login") ||
       pathname.startsWith("/signup") ||
-      pathname.startsWith("/property-search") ||
+      pathname.startsWith("/search") ||
       pathname.startsWith("/forgot-password"))
   ) {
     return NextResponse.next();
@@ -66,6 +66,6 @@ export const config = {
     "/forgot-password",
     "/account",
     "/account/:path*",
-    "/property-search",
+    "/search",
   ],
 };
