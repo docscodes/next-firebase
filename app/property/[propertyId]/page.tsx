@@ -13,6 +13,8 @@ import numeral from "numeral";
 import ReactMarkdown from "react-markdown";
 import BackButton from "./back-button";
 
+export const dynamic = "force-static";
+
 const Property = async ({ params }: { params: Promise<any> }) => {
   const paramsValue = await params;
   const property = await getPropertyById(paramsValue.propertyId);
@@ -45,7 +47,7 @@ const Property = async ({ params }: { params: Promise<any> }) => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            
+
             {property.images.length > 1 && (
               <>
                 <CarouselPrevious className="translate-x-24 size-12" />
